@@ -1,25 +1,25 @@
 
-# Day 01 | Active Directory Baseline — Investigation Notes
+# Day 01 | Active Directory Baseline and Investigation Notes
 
 ## Master Station Log
 
 | Field | Details |
 | --- | --- |
 | Case ID | SOC-AD-001 |
-| Exercise | Active Directory Baseline & Identity Inventory |
+| Exercise | Active Directory Baseline and Identity Inventory |
 | Date | 2026-10-17 |
 | Environment | Proxmox VE, Windows Server 2022, Windows 11 |
-| Domain controller | DC01 |
+| Domain Controller | DC01 |
 | Domain | corp.local |
-| Activity type | Baseline verification and identity inventory |
+| Activity Type | Baseline verification and identity inventory |
 | Status | Completed |
-| Disposition | Baseline documented; no security incident assessed |
+| Disposition | Baseline documented. No security incident assessed. |
 
 ## 1. Initial Objective
 
 Establish a reliable Active Directory baseline before performing identity administration, access management, or security investigations.
 
-The exercise was a planned inventory activity, not a response to a security alert.
+This exercise was a planned inventory activity, not a response to a security alert.
 
 ## 2. Systems and Evidence Sources
 
@@ -31,7 +31,7 @@ The exercise was a planned inventory activity, not a response to a security aler
 
 ## 3. Actions and Verified Results
 
-| Action | Verified result |
+| Action | Verified Result |
 | --- | --- |
 | Execute `hostname` | dc01 |
 | Query computer domain | corp.local |
@@ -45,33 +45,41 @@ The exercise was a planned inventory activity, not a response to a security aler
 | Inspect default Computers container | Empty |
 | Inspect default Users container | Built-in accounts and security groups visible |
 
-These results describe the environment at the time of inspection.
+These findings represent the environment at the time of inspection.
 
 ## 4. Evidence References
 
-### E01 — Active Directory Service
+### Evidence 01: Active Directory Domain Services
 
 ![NTDS service running](evidence/day-01-ntds-service-running.png)
 
 **Observed:** The NTDS service reported a Running status.
 
-### E02 — Organizational Structure
+**Interpretation:** The Active Directory Domain Services service was active at the time of verification.
+
+### Evidence 02: Organizational Unit Structure
 
 ![Active Directory OU structure](evidence/day-01-ad-ou-structure.png)
 
 **Observed:** The existing domain organizational structure was accessible through ADUC.
 
-### E03 — Employee Identity
+**Interpretation:** The identified organizational units provide a starting reference for future identity administration and investigations.
+
+### Evidence 03: Employee Account Inventory
 
 ![Employee account inventory](evidence/day-01-employee-account-inventory.png)
 
 **Observed:** An existing employee identity was present in the Employees OU.
 
-### E04 — Workstation Identity
+**Interpretation:** This account forms part of the initial identity inventory.
+
+### Evidence 04: Workstation Computer Account
 
 ![Workstation computer account](evidence/day-01-workstation-computer-account.png)
 
 **Observed:** A Windows client computer object was present in the Workstations OU.
+
+**Interpretation:** The object provides a reference for subsequent computer account and domain membership investigations.
 
 ## 5. Analyst Assessment
 
@@ -85,23 +93,28 @@ These results describe the environment at the time of inspection.
 
 ### Correlated
 
-PowerShell verification and ADUC inspection provided complementary evidence of the domain controller's configuration and accessible directory structure.
+PowerShell verification and ADUC inspection provided complementary evidence of the domain controller configuration and accessible directory structure.
+
+The service status and directory inventory were consistent with the presence of an operational Active Directory management environment.
 
 ### Interpretation
 
 The collected information establishes an initial identity and computer inventory for future comparison.
 
-An empty OU is an inventory observation, not evidence of a security failure.
+An empty organizational unit is an inventory observation. It does not automatically indicate a security failure or misconfiguration.
 
 ### Unknown
+
+The following areas were not fully validated during Day 01:
 
 - Complete security group memberships
 - End-to-end DNS functionality
 - Authentication success for all identities
 - Group Policy application
-- Full domain connectivity and replication health
+- Full domain connectivity
+- Active Directory replication health, if applicable
 
-These were not established by this exercise.
+These areas require separate verification before conclusions can be made.
 
 ## 6. Actions and Changes
 
@@ -117,26 +130,40 @@ No remediation or detection tuning was performed.
 
 **Disposition:** Inventory completed and documented.
 
-**Security conclusion:** No incident determination was required. The absence of an alert or identified incident during this exercise does not establish that the environment is free from threats.
+**Security Conclusion:** No incident determination was required because this exercise was not triggered by a security alert.
+
+The absence of an identified incident during this exercise does not establish that the environment is free from threats.
 
 ## 8. Verification and Evidence Gaps
 
-The available screenshots support the documented service and directory observations.
+The collected screenshots support the documented service and directory observations.
 
-Additional validation of authentication, DNS, access permissions, and Group Policy remains part of later exercises.
+Additional validation is required for:
+
+- Authentication behavior
+- DNS functionality
+- Security group membership
+- Group Policy application
+- Access permissions
+- Domain connectivity
+
+These items remain outside the completed Day 01 scope.
 
 ## 9. Handover Notes
 
 The next analyst should use this baseline when investigating identity changes or continuing the approved Active Directory exercises.
 
-Do not repeat the completed Day 01 inventory unless a new investigation or configuration change makes revalidation necessary.
+The documented observations provide a reference for identifying changes in accounts, organizational units, security groups, and computer objects.
+
+Previously completed Day 01 checks should not be repeated unless a new investigation, configuration change, or troubleshooting requirement makes revalidation necessary.
 
 ## 10. Next Action
 
-Proceed to Day 02 under the approved 90-day SOC mastery roadmap.
+Proceed to Day 02 under the approved 90 Days of SOC Tier 1 and Tier 2 Mastery roadmap.
 
 Use the documented Day 01 findings as the starting reference.
 
----
+## Documentation Principle
 
-**Documentation principle:** Record what was observed, distinguish interpretation from evidence, identify unknowns, and leave enough information for another analyst to continue the work.
+Record what was observed, distinguish interpretation from evidence, identify unknowns, and leave enough information for another analyst to continue the work.
+
