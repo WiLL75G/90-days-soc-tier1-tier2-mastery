@@ -17,7 +17,7 @@ Establish and document the existing Active Directory baseline before making chan
 | Hypervisor | Proxmox VE |
 | Domain controller | DC01, Windows Server 2022 |
 | Domain | `corp.local` |
-| AD management tool | Active Directory Users and Computers |
+| AD management tool | Active Directory Users and Computers (ADUC) |
 | Client | Windows 11 computer object in the Workstations OU |
 
 ## Practical Work Performed
@@ -61,35 +61,70 @@ This is a simplified inventory of the containers inspected, not an exhaustive re
 
 - Identified an existing employee account, Daniel Carter, in the Employees OU.
 - Confirmed the IT, ServiceAccounts, and Admins OUs were empty at the time of inspection.
-- Located the Windows 11 computer object under Workstations.
+- Located a Windows 11 computer object under Workstations.
 - Located DC01 in the Domain Controllers OU, displayed as a global catalog.
 - Inspected the default Users container and identified built-in accounts and security groups.
 - Confirmed the default Computers container was empty.
 
 ## Evidence
 
-The following genuine home-lab screenshots will be stored in the `evidence/` folder:
+All screenshots below were collected from my actual Active Directory home lab during Day 01.
 
-| Evidence | Purpose |
-| --- | --- |
-| `day-01-ntds-service-running.png` | Verify the AD DS service status |
-| `day-01-ad-ou-structure.png` | Show the organizational structure |
-| `day-01-employee-account-inventory.png` | Show the existing employee account |
-| `day-01-workstation-computer-account.png` | Show the workstation computer object |
+### Evidence 01: Active Directory Domain Services
 
-Screenshots will be embedded after the evidence files are uploaded.
+![NTDS service running](evidence/day-01-ntds-service-running.png)
+
+**Observation:** The NTDS service was running on DC01, confirming that the Active Directory Domain Services service was active at the time of verification.
+
+### Evidence 02: Organizational Unit Structure
+
+![Active Directory organizational unit structure](evidence/day-01-ad-ou-structure.png)
+
+**Observation:** Inspected the existing `corp.local` organizational structure, including the CorpOps departmental OUs.
+
+### Evidence 03: Employee Account Inventory
+
+![Employee account inventory](evidence/day-01-employee-account-inventory.png)
+
+**Observation:** Identified an existing employee account in the CorpOps Employees OU.
+
+### Evidence 04: Workstation Computer Account
+
+![Workstation computer account](evidence/day-01-workstation-computer-account.png)
+
+**Observation:** Located the Windows client computer account in the CorpOps Workstations OU.
 
 ## SOC Analyst Relevance
 
-An identity baseline helps an analyst understand which accounts, groups, and computer objects exist before investigating suspicious changes. It also provides context for distinguishing expected administrative activity from changes requiring investigation.
+An Active Directory baseline helps a SOC analyst understand which accounts, groups, organizational units, and computer objects exist before investigating suspicious identity changes.
+
+This context supports investigations involving:
+
+- Unexpected account creation or modification
+- Unauthorized security group membership changes
+- Suspicious computer account activity
+- Privilege escalation involving Active Directory identities
+- Changes that deviate from the established environment baseline
+
+These are potential investigation use cases, not incidents detected during Day 01.
 
 ## Observations and Limitations
 
 **Observed:** The NTDS service was running, the domain was identified as `corp.local`, and the listed Active Directory objects were visible in ADUC.
 
-**Not established by this exercise:** Full security-group memberships, successful authentication for every account, DNS health, Group Policy application, or end-to-end domain connectivity. These require separate verification.
+**Not yet verified:** Complete security group memberships, successful authentication for every account, DNS health, Group Policy application, and end-to-end domain connectivity.
+
+These areas require separate validation during subsequent exercises.
 
 ## Outcome
 
-Completed the initial Active Directory baseline and identity inventory without modifying existing domain objects. The documented findings provide a starting reference for subsequent identity administration, troubleshooting, and security investigations.
+Completed the initial Active Directory baseline and identity inventory without modifying existing domain objects.
+
+The documented findings establish a reference for future identity administration, Help Desk troubleshooting, and SOC security investigations.
+
+## Next Exercise
+
+**Day 02 — Identity Inventory**
+
+Continue the approved Active Directory learning plan, building on the Day 01 baseline without repeating completed checks.
   
