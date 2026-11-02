@@ -1,4 +1,5 @@
 
+
 # Phase 01: Active Directory & Help Desk
 
 **Days:** 01–20  
@@ -48,4 +49,3 @@ Each completed exercise will include a technical README, selected genuine eviden
 ## Evidence Policy
 
 Only evidence collected from my actual lab will be published. Credentials, secrets, and sensitive information will be excluded or redacted.
-  
