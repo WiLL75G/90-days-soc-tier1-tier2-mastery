@@ -7,7 +7,7 @@
 | --- | --- |
 | Case ID | SOC-AD-001 |
 | Exercise | Active Directory Baseline and Identity Inventory |
-| Date | 2026-10-17 |
+| Date | 2026-11-03 |
 | Environment | Proxmox VE, Windows Server 2022, Windows 11 |
 | Domain Controller | DC01 |
 | Domain | corp.local |
