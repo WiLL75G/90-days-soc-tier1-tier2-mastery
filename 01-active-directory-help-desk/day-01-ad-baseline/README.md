@@ -2,7 +2,7 @@
 # Day 01 | Active Directory Baseline & Identity Inventory
 
 **Project:** 90 Days of SOC Tier 1 & Tier 2 Mastery  
-**Phase:** 01 — Active Directory & Help Desk  
+**Phase:** 01 Active Directory & Help Desk  
 **Status:** Hands-on complete  
 **Lab domain:** `corp.local`
 
