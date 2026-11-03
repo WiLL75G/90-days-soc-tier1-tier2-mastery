@@ -88,8 +88,8 @@ Focus areas include:
 | Day | Exercise | Status | Documentation |
 |---|---|---|---|
 | 01 | Active Directory Baseline and Identity Inventory | Completed | [Day 01](01-active-directory-help-desk/day-01-ad-baseline/README.md) |
-| 02 to 09 | Active Directory and Help Desk Exercises | Completed | See Phase 01 documentation |
-| 10 | Password Resets & Account Unlocks | Current | Pending verification |
+| 02 to 09 | Active Directory and Help Desk Exercises | Not started | Pending |
+| 10 | Password Resets & Account Unlocks | Not started | Pending |
 | 11 to 19 | Remaining Help Desk Exercises | Not started | Pending |
 | 20 | Active Directory and Help Desk Capstone | Not started | Pending |
 
