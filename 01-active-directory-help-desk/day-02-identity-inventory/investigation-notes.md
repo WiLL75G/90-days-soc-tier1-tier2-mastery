@@ -3,7 +3,7 @@
 
 **Project:** 90 Days of SOC Tier 1 & Tier 2 Mastery  
 **Case ID:** SOC-AD-D02-001  
-**Investigation Date:** October 19, 2026  
+**Investigation Date:** Nov 04, 2026  
 **System:** DC01, Windows Server 2022  
 **Domain:** `corp.local`  
 **Account:** Daniel Carter (`dcarter`)  
