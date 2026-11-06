@@ -1,182 +1,425 @@
 
 # Day 02 | Identity Inventory Investigation Notes
 
-**Project:** 90 Days of SOC Tier 1 & Tier 2 Mastery  
-**Case ID:** SOC-AD-D02-001  
-**Investigation Date:** Nov 04, 2026  
-**System:** DC01, Windows Server 2022  
-**Domain:** `corp.local`  
-**Account:** Daniel Carter (`dcarter`)  
-**Investigation Type:** Identity baseline review  
-**Status:** Completed
+## Master Station Log
+
+| Field | Details |
+| --- | --- |
+| Case ID | SOC-AD-D02-001 |
+| Exercise | Active Directory Identity Inventory |
+| Date | 2026-11-04 |
+| Environment | Proxmox VE, Windows Server 2022 |
+| Domain Controller | DC01 |
+| Domain | corp.local |
+| Account Under Review | Daniel Carter (`dcarter`) |
+| Activity Type | Identity baseline review |
+| Status | Completed |
+| Disposition | Baseline documented. No security incident established. |
 
 ## 1. Initial Objective
 
-Establish an evidence-based identity baseline for an existing Active Directory account.
+Establish an evidence-based identity baseline for an existing Active Directory account before performing subsequent identity administration or security investigations.
 
-The review focused on account settings, direct group membership, organizational attributes, directory timestamps, recorded authentication attributes, and enabled status.
+The review focused on:
 
-No security alert triggered this investigation.
+- Account identity and logon names
+- Account configuration and expiration settings
+- Direct security group membership
+- Organizational attributes
+- Directory creation and modification timestamps
+- Recorded authentication attributes
+- Account enabled status
 
-## 2. Initial Signal
+This was a planned identity inventory exercise, not an investigation triggered by a security alert.
 
-The account `dcarter` was identified in:
+The objective was to document the account's observed configuration and identify limitations requiring further verification.
+
+## 2. Systems and Evidence Sources
+
+- DC01 running Windows Server 2022
+- Active Directory domain: corp.local
+- Active Directory Users and Computers (ADUC)
+- Account properties and Account tab
+- Member Of tab
+- Organization tab
+- Attribute Editor
+- Administrative Windows PowerShell
+
+The account under review was Daniel Carter (`dcarter`), located in:
 
 `corp.local > CorpOps > Employees`
 
-The account was selected for a planned baseline review.
+ADUC was used to inspect account properties, membership, organizational information, and directory attributes.
 
-## 3. Evidence Sources
+PowerShell was used to verify the account's enabled status.
 
-| Source | Information Reviewed |
-|---|---|
-| Active Directory Users and Computers | Account properties |
-| Account tab | Logon name and account settings |
-| Member Of tab | Direct group membership |
-| Organization tab | Organizational information |
-| Attribute Editor | Directory metadata and logon attributes |
-| Windows PowerShell | Enabled status |
+No Windows Security authentication events were retrieved during this exercise.
 
-## 4. Observed Findings
+## 3. Actions and Verified Results
 
-### Identity
+| Action | Verified Result |
+| --- | --- |
+| Locate `dcarter` in ADUC | Account present in CorpOps Employees OU |
+| Inspect account identity | Daniel Carter |
+| Review user principal name | `dcarter@corp.local` |
+| Review legacy logon name | `CORP\dcarter` |
+| Inspect account expiration | Never |
+| Inspect password never expires | Unchecked |
+| Inspect reversible password encryption option | Unchecked |
+| Inspect mandatory password change at next logon | Unchecked |
+| Inspect Member Of tab | Domain Users was the only displayed direct membership |
+| Inspect Organization tab | Job title, department, company, and manager not populated |
+| Review `whenCreated` | October 12, 2026, 4:24:52 AM |
+| Review `whenChanged` | October 12, 2026, 4:33:17 AM |
+| Review `lastLogon` | October 18, 2026, 3:57:57 AM |
+| Review `lastLogonTimestamp` | October 12, 2026, 4:32:37 AM |
+| Review `logonCount` | 7 |
+| Review `badPwdCount` | 0 |
+| Review `lockoutTime` | 0 |
+| Verify enabled status using PowerShell | True |
 
-The account was identified as Daniel Carter.
+The directory timestamps were displayed in Pacific Daylight Time.
 
-The user principal name was `dcarter@corp.local`, and the legacy logon name was `CORP\dcarter`.
+These findings represent the account's observed state at the time of inspection.
 
-### Account Configuration
+The checks established an initial identity configuration baseline but did not constitute a complete authentication, authorization, or security audit.
 
-Account expiration was set to Never.
+## 4. Technical Evidence and Findings
 
-The visible options for password never expires, reversible password encryption, and mandatory password change at next logon were unchecked.
+### Finding 01: Account Identity and Location
 
-### Group Membership
+**Verification method:** Active Directory Users and Computers.
 
-The Member Of tab displayed Domain Users as the only direct group membership.
+**Observed:** The Daniel Carter account was present in the CorpOps Employees OU.
 
-No direct privileged group membership was visible.
+The account identifiers were:
 
-### Organizational Information
+- Displayed identity: Daniel Carter
+- User principal name: `dcarter@corp.local`
+- Legacy logon name: `CORP\dcarter`
 
-Job title, department, company, and manager were not populated.
+**Interpretation:** The account exists in the directory and has identifiable logon attributes that can be used for subsequent identity administration and security investigations.
 
-### Directory Timestamps
+**Limitation:** Account presence and naming information do not independently establish ownership, authorization, or successful authentication.
+
+### Finding 02: Account Configuration
+
+**Verification method:** ADUC Account tab.
+
+**Observed:**
+
+- Account expiration was set to Never.
+- Password never expires was unchecked.
+- Reversible password encryption was unchecked.
+- Mandatory password change at next logon was unchecked.
+
+**Interpretation:** These observations establish the visible account configuration at the time of inspection.
+
+An account configured without an expiration date is not automatically misconfigured. Its appropriateness depends on organizational policy and account purpose.
+
+**Limitation:** The inspected settings do not independently establish password policy compliance, password quality, or the complete security state of the account.
+
+### Finding 03: Direct Group Membership
+
+**Verification method:** ADUC Member Of tab.
+
+**Observed:** Domain Users was the only direct group membership displayed.
+
+No direct privileged group membership was visible in the inspected view.
+
+**Interpretation:** The observed membership provides an initial reference for future group membership and access reviews.
+
+**Limitation:** The Member Of tab does not independently establish complete effective permissions, delegated access, or every possible authorization path.
+
+No conclusion about the account's complete privilege level can be made from this view alone.
+
+### Finding 04: Organizational Attributes
+
+**Verification method:** ADUC Organization tab.
+
+**Observed:** The following attributes were not populated:
+
+- Job title
+- Department
+- Company
+- Manager
+
+**Interpretation:** These fields represent missing organizational information in the inspected directory record.
+
+They may reduce the context available during identity investigations and access reviews.
+
+**Limitation:** Missing organizational attributes do not independently establish unauthorized activity or a policy violation.
+
+An authoritative identity standard or HR record would be needed to determine whether the missing values represent a compliance issue.
+
+### Finding 05: Directory Creation and Modification Timestamps
+
+**Verification method:** ADUC Attribute Editor.
+
+**Observed:**
 
 | Attribute | Recorded Value |
-|---|---|
+| --- | --- |
 | `whenCreated` | October 12, 2026, 4:24:52 AM |
 | `whenChanged` | October 12, 2026, 4:33:17 AM |
 
-Times were displayed in Pacific Daylight Time.
+The values were displayed in Pacific Daylight Time.
 
-### Authentication Attributes
+**Interpretation:** The timestamps provide historical directory metadata for the account.
+
+The `whenCreated` value records account object creation time, while `whenChanged` records the most recent modification time represented by that attribute in the inspected directory data.
+
+**Limitation:** The modification timestamp does not identify which attribute changed, who performed the change, or whether the action was authorized.
+
+Directory change auditing would be required for stronger attribution.
+
+### Finding 06: Recorded Authentication Attributes
+
+**Verification method:** ADUC Attribute Editor.
+
+**Observed:**
 
 | Attribute | Recorded Value |
-|---|---|
+| --- | --- |
 | `lastLogon` | October 18, 2026, 3:57:57 AM |
 | `lastLogonTimestamp` | October 12, 2026, 4:32:37 AM |
 | `logonCount` | 7 |
 | `badPwdCount` | 0 |
 | `lockoutTime` | 0 |
 
-### Enabled Status
+The recorded `lastLogon` and `lastLogonTimestamp` values differed.
 
-PowerShell command:
+**Interpretation:** These attributes provide historical authentication-related information associated with the directory account.
 
-```powershell id="d3x9qv"
+The `lastLogon` and `lastLogonTimestamp` attributes have different update and replication behaviors.
+
+Their differing values do not independently establish suspicious activity.
+
+**Limitation:** These attributes are not a complete authentication event history.
+
+The observed `logonCount` value must not be presented as proof of seven successful logon events during a particular investigation period.
+
+The observed `badPwdCount` value does not prove that no failed authentication attempts occurred historically.
+
+No Windows Security authentication events were retrieved to establish individual logon times, source workstations, logon types, or authorization context.
+
+### Finding 07: Account Enabled Status
+
+**Verification method:** Administrative PowerShell.
+
+**Command executed:**
+
+```powershell
 Get-ADUser -Identity dcarter -Properties Enabled | Select-Object Name,Enabled
 ```
 
-Observed result:
+**Observed output:**
 
-```text id="v6k2rp"
+```text
 Name           Enabled
 ----           -------
 Daniel Carter  True
 ```
 
-The account was enabled at the time of verification.
+**Observed:** The account returned `Enabled = True`.
 
-## 5. Correlation
+**Interpretation:** The account was enabled at the time of the PowerShell verification.
 
-The identity was confirmed across the account properties, group membership view, Attribute Editor, and PowerShell output.
+**Limitation:** An enabled account is not proof of successful authentication, appropriate permissions, or authorized account use.
 
-The recorded `lastLogon` and `lastLogonTimestamp` values differed.
+The check established the account's reported enabled state only.
 
-This difference was interpreted in the context of the attributes' different update and replication behaviors.
+## 5. Analyst Assessment
 
-No Windows Security authentication events were retrieved during this exercise.
+### Observed
 
-## 6. Interpretation
+- The Daniel Carter account existed in the CorpOps Employees OU.
+- The account used the identifiers `dcarter@corp.local` and `CORP\dcarter`.
+- Account expiration was set to Never.
+- The inspected password-related options were unchecked.
+- Domain Users was the only displayed direct group membership.
+- Organizational attributes were not populated.
+- Directory creation and modification timestamps were recorded.
+- Authentication-related attributes contained historical values.
+- `lastLogon` and `lastLogonTimestamp` contained different timestamps.
+- `logonCount` was 7.
+- `badPwdCount` was 0.
+- `lockoutTime` was 0.
+- PowerShell confirmed `Enabled = True`.
 
-The available evidence supports the following conclusions:
+These observations document the inspected account state during the planned baseline review.
 
-1. The account exists and was enabled.
-2. Domain Users was the only direct group membership displayed.
-3. Organizational attributes were incomplete.
-4. Directory creation and modification timestamps were recorded.
-5. Authentication-related attributes contained historical values.
-6. No unauthorized activity was established.
+### Correlated
 
-The directory modification timestamp did not identify who changed the account or which attributes changed.
+ADUC and PowerShell provided complementary observations of the same Active Directory identity.
 
-The authentication attributes did not establish whether individual logons were authorized.
+The account properties established identity and configuration details.
 
-## 7. Evidence Gaps
+The Member Of tab provided the displayed direct group membership.
 
-The following items were not verified:
+The Organization tab identified unpopulated organizational fields.
 
-1. Account ownership against an authoritative HR record.
-2. Approved department and manager information.
-3. Complete effective permissions and delegated access.
-4. Authentication source workstation and logon type.
-5. Windows Security Event ID 4624 and 4625 records.
-6. Directory modification audit events and change authorization.
+The Attribute Editor exposed directory metadata and authentication-related attributes.
 
-These limitations prevent a stronger security conclusion.
+PowerShell independently queried the account's enabled status.
 
-## 8. Analyst Reasoning Exercise
+Together, these findings support the establishment of an initial account inventory.
+
+The recorded `lastLogon` and `lastLogonTimestamp` values differed, consistent with the attributes' different update and replication behaviors.
+
+No event-level authentication correlation was performed.
+
+### Interpretation
+
+The collected information establishes an initial identity baseline for Daniel Carter.
+
+The account exists, was enabled, and had Domain Users as its only displayed direct membership.
+
+The unpopulated organizational attributes represent a documentation gap requiring comparison against an approved identity standard.
+
+The historical authentication-related values provide context but do not establish whether individual authentication attempts were authorized.
+
+A directory modification timestamp cannot independently identify the actor or the specific change.
+
+No unauthorized activity or security incident was established during this exercise.
+
+### Unknown
+
+The following areas were not fully validated during Day 02:
+
+- Account ownership against an authoritative HR record
+- Approved department and manager information
+- Complete effective permissions and delegated access
+- Authentication source workstation and logon type
+- Windows Security Event ID 4624 and 4625 records
+- Directory modification audit events
+- Authorization for historical account changes
+- Complete authentication history across relevant domain controllers
+
+These areas require separate verification before stronger security conclusions can be made.
+
+## 6. Actions and Changes
+
+This was a read-only identity baseline exercise.
+
+The activities consisted of:
+
+- Locating the existing account in ADUC
+- Reviewing account configuration
+- Inspecting direct group membership
+- Inspecting organizational attributes
+- Reviewing directory timestamps
+- Reviewing authentication-related directory attributes
+- Verifying enabled status using PowerShell
+- Documenting the observed results
+
+No account configuration changes were intentionally performed.
+
+No password reset, account unlock, group membership change, or account modification was performed as part of the documented exercise.
+
+No remediation or detection tuning was performed.
+
+### Analyst Reasoning Exercise
 
 A hypothetical scenario involving seven successful logons and no failed logons was used to practice investigative reasoning.
 
-The scenario was not based on retrieved Windows Security events.
+This scenario was not derived from retrieved Windows Security events.
 
-The exercise reinforced that normal-looking authentication activity requires appropriate context before being classified as authorized.
+The exercise reinforced that normal-looking authentication activity requires supporting context before it can be classified as authorized.
 
-## 9. Classification and Disposition
+The hypothetical scenario is not evidence of actual authentication activity.
 
-**Classification:** Planned identity baseline review  
-**Security Incident:** Not established  
-**Disposition:** Baseline documented  
-**Account Changes:** None intentionally performed
+## 7. Classification and Disposition
 
-The available evidence did not demonstrate suspicious activity.
+**Classification:** Planned Active Directory identity baseline review.
 
-Missing organizational information was recorded as a documentation gap rather than a confirmed policy violation.
+**Disposition:** Identity baseline completed and documented.
 
-## 10. Verification
+**Security Conclusion:** No security incident was established during the review.
 
-The final PowerShell check returned:
+The available observations did not demonstrate unauthorized activity.
 
-`Enabled = True`
-
-The account remained enabled at the time of verification.
+Missing organizational information was documented as an identity record completeness gap rather than a confirmed security policy violation.
 
 No corrective action was required based solely on the observed findings.
 
-## 11. Outstanding Items
+The absence of an identified incident during the baseline review does not establish that all historical account activity was authorized.
 
-Compare the account's organizational information against an approved identity standard when available.
+## 8. Verification and Evidence Gaps
 
-Use authentication and directory auditing evidence in a future investigation if suspicious activity is identified.
+The completed ADUC inspections and PowerShell verification support the documented account configuration and enabled status.
 
-## 12. Handover Notes
+However, the following were not comprehensively validated:
 
-An analyst continuing this work should begin with the documented account baseline and supporting screenshots in the `evidence` directory.
+- Authoritative account ownership
+- Organizational attribute accuracy
+- Effective access permissions
+- Privileged access through indirect authorization paths
+- Authentication source systems
+- Authentication logon types
+- Windows Security Event ID 4624 and 4625 records
+- Directory modification audit records
+- Change approval and authorization history
 
-The account was enabled, had Domain Users as its only displayed direct membership, and lacked populated organizational details.
+These items remain outside the completed Day 02 scope.
 
-No security incident was confirmed.
+The recorded authentication-related directory attributes must not be treated as substitutes for a complete authentication event investigation.
 
-Further investigation should be driven by a new alert, an access review requirement, or additional evidence rather than assuming the existing attributes indicate malicious activity.
+No unsupported conclusions about account compromise, misuse, or policy violations should be inferred from the available observations.
+
+## 9. Handover Notes
+
+An analyst continuing this work should use the documented identity baseline when reviewing future account changes or investigating suspicious authentication activity.
+
+### Baseline Reference
+
+| Item | Documented State |
+| --- | --- |
+| Domain controller | DC01 |
+| Domain | corp.local |
+| Account | Daniel Carter (`dcarter`) |
+| Account location | CorpOps Employees OU |
+| User principal name | `dcarter@corp.local` |
+| Legacy logon name | `CORP\dcarter` |
+| Enabled status | True |
+| Account expiration | Never |
+| Displayed direct membership | Domain Users |
+| Organizational attributes | Not populated |
+| `logonCount` | 7 |
+| `badPwdCount` | 0 |
+| `lockoutTime` | 0 |
+| Investigation disposition | Baseline documented |
+
+### Investigation Considerations
+
+When investigating subsequent account activity, compare the current directory state against the Day 02 observations.
+
+Determine:
+
+- Whether the account remains enabled.
+- Whether account configuration has changed.
+- Whether group memberships have changed.
+- Whether organizational information has been updated.
+- Whether directory modification activity can be attributed to an authorized actor.
+- Whether authentication events support the activity under investigation.
+
+Do not classify account activity as suspicious solely because a directory timestamp changed or because authentication-related attributes contain historical values.
+
+### Outstanding Verification
+
+Account ownership, effective permissions, authentication sources, event-level logon history, and directory change authorization were not comprehensively validated.
+
+Previously completed Day 02 checks should not be repeated unless a new investigation, account change, access review, or troubleshooting requirement makes revalidation necessary.
+
+## 10. Next Action
+
+Proceed to Day 03 under the approved 90 Days of SOC Tier 1 and Tier 2 Mastery roadmap.
+
+Use the documented Day 02 identity baseline as a reference for subsequent account administration and security investigations.
+
+Any additional checks must follow the approved Day 03 scope and must not be represented as completed Day 02 work.
+
+## Documentation Principle
+
+Record what was observed, distinguish interpretation from evidence, identify unknowns, and leave enough information for another analyst to continue the work.
+
