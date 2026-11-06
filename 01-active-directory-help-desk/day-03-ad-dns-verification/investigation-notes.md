@@ -7,7 +7,7 @@
 | --- | --- |
 | Case ID | SOC-AD-D03-001 |
 | Exercise | Active Directory Domain Services and DNS Verification |
-| Date | 2026-10-19 |
+| Date | 2026-11-05 |
 | Environment | Windows Server 2022 |
 | Domain Controller | DC01 |
 | Domain | corp.local |
