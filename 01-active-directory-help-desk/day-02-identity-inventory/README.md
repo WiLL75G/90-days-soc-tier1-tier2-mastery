@@ -5,7 +5,7 @@
 **Phase:** 01 | Active Directory & Help Desk  
 **Status:** Hands-on complete  
 **Lab Domain:** `corp.local`  
-**Investigation Date:** October 19, 2026
+**Investigation Date:** November 4, 2026
 
 ## Objective
 
