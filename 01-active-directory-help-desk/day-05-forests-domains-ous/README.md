@@ -1,5 +1,5 @@
 
-# Day 05 | Active Directory Forests, Domains, and Organizational Units
+# Day 05/90 | Active Directory Forests, Domains, and Organizational Units
 
 ## 90 Days of SOC Tier 1 & Tier 2 Mastery
 
@@ -69,6 +69,8 @@ The console displayed `corp.local` as the domain available in the environment.
 
 This provided an initial graphical view of the domain structure.
 
+![Active Directory Domains and Trusts showing corp.local](images/01-domain-discovery(1).png)
+
 **Observed evidence:**
 - Domain name: `corp.local`
 - Displayed object type: `domainDNS`
@@ -95,6 +97,8 @@ Name        RootDomain  Domains
 corp.local  corp.local  {corp.local}
 ```
 
+![PowerShell Get-ADForest query showing forest name root domain and domains](images/03-forest-root-domain-query(1).png)
+
 **Verified findings:**
 
 | Property | Result |
@@ -118,6 +122,8 @@ I did not create another domain or test any interdomain or interforest trust rel
 I opened the properties of `corp.local` in Active Directory Domains and Trusts.
 
 The General tab displayed:
+
+![Active Directory domain properties showing Windows Server 2016 domain and forest functional levels](images/02-domain-functional-levels(1).png)
 
 | Property | Observed value |
 |---|---|
@@ -153,6 +159,8 @@ The existing `CorpOps` OU contained four visible child OUs:
 
 The domain also contained other visible objects and containers, including `Admins`, `Builtin`, `Computers`, `Domain Controllers`, and `Users`.
 
+![Active Directory Users and Computers showing the CorpOps OU hierarchy](images/04-corpops-ou-hierarchy(1).png)
+
 ### Verified hierarchy
 
 ```text
@@ -181,6 +189,8 @@ corp.local
 
 This represents the relevant objects observed during the investigation, not an exhaustive inventory of every Active Directory object.
 
+![CorpOps organizational unit properties showing its canonical name and object class](images/05-corpops-ou-properties(1).png)
+
 ### Analyst reasoning
 
 OUs provide a way to organize directory objects for administrative delegation and Group Policy application.
@@ -203,6 +213,8 @@ I opened the Object tab of the `Employees` OU.
 
 **Observed properties:**
 
+![Employees OU properties showing organizational unit object class and canonical name](images/07-employees-ou-properties(1).png)
+
 | Property | Value |
 |---|---|
 | Canonical name | corp.local/CorpOps/Employees |
@@ -224,6 +236,8 @@ This representation follows from the observed canonical path and object class.
 I inspected the default `Users` object in the same domain.
 
 **Observed properties:**
+
+![Default Users container properties showing Container object class](images/06-users-container-object-class(1).png)
 
 | Property | Value |
 |---|---|
@@ -260,6 +274,8 @@ Inside the `Employees` OU, I identified the existing user account **Daniel Carte
 
 The Object tab confirmed the account's canonical directory location:
 
+![Daniel Carter user object properties showing its canonical location](images/08-daniel-carter-user-properties(1).png)
+
 ```text
 corp.local/CorpOps/Employees/Daniel Carter
 ```
@@ -268,7 +284,11 @@ corp.local/CorpOps/Employees/Daniel Carter
 
 I opened the account's Attribute Editor and inspected the `distinguishedName` attribute.
 
+![Daniel Carter user Attribute Editor in Active Directory Users and Computers](images/09-daniel-carter-attribute-editor(1).png)
+
 The String Attribute Editor displayed the complete value:
+
+![Daniel Carter distinguishedName attribute showing the complete directory path](images/10-daniel-carter-distinguished-name(1).png)
 
 ```text
 CN=Daniel Carter,OU=Employees,OU=CorpOps,DC=corp,DC=local
@@ -322,6 +342,8 @@ I inspected the `Workstations` OU beneath `CorpOps`.
 
 The existing domain workstation was present as a Computer object:
 
+![WIN11-CLIENT computer properties showing its location in the Workstations OU](images/11-win11-client-computer-properties(1).png)
+
 ```text
 WIN11-CLIENT
 ```
@@ -337,6 +359,8 @@ corp.local/CorpOps/Workstations/WIN11-CLIENT
 Using the workstation object's Attribute Editor, I viewed its complete `distinguishedName` value.
 
 **Directly verified result:**
+
+![WIN11-CLIENT distinguishedName attribute showing its complete directory path](images/12-win11-client-distinguished-name(1).png)
 
 ```text
 CN=WIN11-CLIENT,OU=Workstations,OU=CorpOps,DC=corp,DC=local
@@ -534,3 +558,4 @@ I verified the single-domain forest, observed both functional levels, investigat
 The investigation produced a documented Active Directory structural baseline without modifying the environment.
 
 **Core takeaway:** Before investigating or changing an Active Directory identity, understand where it belongs, how that location affects administration, and what the available evidence actually proves.
+
