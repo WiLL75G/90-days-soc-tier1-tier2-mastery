@@ -1,5 +1,5 @@
 
-# Day 05/90 | Active Directory Forests, Domains, and Organizational Units
+# Day 05 | Active Directory Forests, Domains, and Organizational Units
 
 ## 90 Days of SOC Tier 1 & Tier 2 Mastery
 
