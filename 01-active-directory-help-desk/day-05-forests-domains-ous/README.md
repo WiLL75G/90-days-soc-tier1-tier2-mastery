@@ -79,7 +79,7 @@ The domain is the logical administrative and authentication boundary in which th
 
 However, viewing a domain in the console alone does not establish the complete forest topology. I therefore performed an additional forest-level query.
 
-![Active Directory Domains and Trusts showing corp.local](evidence/01-domain-discovery(1).png)
+![Active Directory Domains and Trusts showing corp.local](<evidence/01-domain-discovery(2).png>)
 
 ### 4.2 Confirming the Forest Using PowerShell
 
@@ -113,7 +113,7 @@ This is a single-domain forest according to the collected evidence.
 
 I did not create another domain or test any interdomain or interforest trust relationships.
 
-![PowerShell forest root domain query](evidence/03-forest-root-domain-query(1).png)
+![PowerShell forest root domain query](<evidence/03-forest-root-domain-query(2).png>)
 
 ---
 
@@ -142,7 +142,7 @@ The server operating system version and Active Directory functional level are se
 
 Raising functional levels is an administrative operation that requires compatibility planning. It was not necessary for this investigation.
 
-![Domain and forest functional levels](evidence/02-domain-functional-levels(1).png)
+![Domain and forest functional levels](<evidence/02-domain-functional-levels(2).png>)
 
 ---
 
@@ -197,9 +197,9 @@ However, the OU names alone do not prove that particular permissions, delegation
 
 Those controls would require separate verification.
 
-![CorpOps OU hierarchy](evidence/04-corpops-ou-hierarchy(1).png)
+![CorpOps OU hierarchy](<evidence/04-corpops-ou-hierarchy(2).png>)
 
-![CorpOps OU properties](evidence/05-corpops-ou-properties(1).png)
+![CorpOps OU properties](<evidence/05-corpops-ou-properties(2).png>)
 
 ---
 
@@ -229,7 +229,7 @@ OU=Employees,OU=CorpOps,DC=corp,DC=local
 
 This representation follows from the observed canonical path and object class.
 
-![Employees OU properties](evidence/07-employees-ou-properties(1).png)
+![Employees OU properties](<evidence/07-employees-ou-properties(2).png>)
 
 ### 7.2 Users Container
 
@@ -245,7 +245,7 @@ I inspected the default `Users` object in the same domain.
 
 The container displayed built-in accounts and security groups, including `Administrator`, `Guest`, and `krbtgt`.
 
-![Users container object class](evidence/06-users-container-object-class(1).png)
+![Users container object class](<evidence/06-users-container-object-class(2).png>)
 
 ### Comparison
 
@@ -278,13 +278,13 @@ The Object tab confirmed the account's canonical directory location:
 corp.local/CorpOps/Employees/Daniel Carter
 ```
 
-![Daniel Carter user properties](evidence/08-daniel-carter-user-properties(1).png)
+![Daniel Carter user properties](<evidence/08-daniel-carter-user-properties(2).png>)
 
 ### 8.2 Verifying the Distinguished Name
 
 I opened the account's Attribute Editor and inspected the `distinguishedName` attribute.
 
-![Daniel Carter Attribute Editor](evidence/09-daniel-carter-attribute-editor(1).png)
+![Daniel Carter Attribute Editor](<evidence/09-daniel-carter-attribute-editor(2).png>)
 
 The String Attribute Editor displayed the complete value:
 
@@ -294,7 +294,7 @@ CN=Daniel Carter,OU=Employees,OU=CorpOps,DC=corp,DC=local
 
 This directly verified the account's location within the domain and nested OUs.
 
-![Daniel Carter distinguished name](evidence/10-daniel-carter-distinguished-name(1).png)
+![Daniel Carter distinguished name](<evidence/10-daniel-carter-distinguished-name(2).png>)
 
 ### 8.3 Understanding the DN Components
 
@@ -352,7 +352,7 @@ Its observed canonical directory path was:
 corp.local/CorpOps/Workstations/WIN11-CLIENT
 ```
 
-![WIN11-CLIENT computer properties](evidence/11-win11-client-computer-properties(1).png)
+![WIN11-CLIENT computer properties](<evidence/11-win11-client-computer-properties(2).png>)
 
 ### 9.2 Verifying the Computer Distinguished Name
 
@@ -382,7 +382,7 @@ It does not independently establish the workstation's current connectivity, auth
 
 Those require separate evidence.
 
-![WIN11-CLIENT distinguished name](evidence/12-win11-client-distinguished-name(1).png)
+![WIN11-CLIENT distinguished name](<evidence/12-win11-client-distinguished-name(2).png>)
 
 ---
 
